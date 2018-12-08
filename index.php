@@ -1,50 +1,3 @@
-<?php
-include("functions.php");
-
-$wrongpass = '';
-$wronginfo = '<div class="alert alert-danger" role="alert">  <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Wrong credentials entered</div>';
-
-if(isloggedin()==FALSE)
-{
-}
-else
-{
-header("location:home.php");
-
-}
-
-  if(isset($_POST['email']) && ($_POST['pass']))
-{
-
-$pass= mysqli_real_escape_string($conn, $_POST['pass']);
-$email= mysqli_real_escape_string($conn, $_POST['email']);
-$query="SELECT * from users where uemail='$email'";
-$result = $conn->query($query);
-
-if ($result->num_rows < 1)
-  {
-      $wrongpass = $wronginfo;
-  }
-
- while($row = $result->fetch_assoc())
-    {
-  if(md5($pass)==$row['upass'])
-  {
-    $_SESSION['logged_in']=TRUE;
-    $_SESSION['id']=$row['uid'];
-    $_SESSION['unaam']=$row['uname'];
-    session_start();
-    header("location:home.php");
-  }
-  else
-   {
-    $wrongpass = $wronginfo;
-   }
-    }
-  }
-
-
-?>
 <head>
 <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -186,42 +139,6 @@ if ($result->num_rows < 1)
                     <h9 class="animated fadeIn mb-1"><p class="ex3">© Copyright 2018</p></h9>
                 </div>
     </div>
-
-<?php
-
-if(isset($_POST['name']) && trim($_POST['password']) != "")
-{
-
-$name= mysqli_real_escape_string($conn, $_POST['name']);
-$query="SELECT * from users where uemail='$name'";
-$result = $conn->query($query);
-if ($result->num_rows < 1)
-  {
-$uname = mysqli_real_escape_string($conn, $_POST['fname']);
-$uname = strip_tags($uname);
-$uemail = mysqli_real_escape_string($conn, $_POST['name']);
-$uemail = strip_tags($uemail);
-$upass = mysqli_real_escape_string($conn, $_POST['password']);
-$upass = md5($upass);
-
-$sql = "INSERT INTO users (uname, uemail, upass)
-VALUES ('$uname','$uemail','$upass')";
-if ($conn->query($sql) === TRUE)
-  {
-  echo '<div class="alert alert-success" role="alert">
-  <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>Congratulations! Your account has been created successfully!
-</div>';
-  } else
-  {
-    echo "Error: " . $sql . "<br>" . $conn->error;
-  }
-} else
-{
-   echo '<div class="alert alert-danger" role="alert">
-  <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> You are already registered. Login using your email-id.</div>';
-}
-}
-?>
   </div>
   </div>
 
